@@ -83,8 +83,13 @@
 				</nav>
 			</div>
 		</header>
+{% block addform %}{%endblock %}
 
-		
+<form id="upload-form" action = "{{url_for('added')}}" method ="POST" enctype="multipart/form-data" >
+ <input type="file" name = "file" accept = "image/*" >
+<input type ="text" name = "itemname" placeholder="Enter name of item" >
+<input type="submit" value="UPLOAD" >
+</form>		
 		<!-- END #fh5co-header -->
 <!-- END .container-fluid -->
 
@@ -100,6 +105,10 @@
 				</div>
 			</div>
 		</footer>
+
+
+
+
 		<!-- END #fh5co-footer -->
 		
 	<!-- jQuery -->

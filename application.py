@@ -1,6 +1,6 @@
-from flask import Flask, render_template,request
-from flask_sqlalchemy import SQLAlchemy
-
+from flask import *
+from flask_sqlalchemy import *
+import os
 
 
 app = Flask(__name__)
@@ -8,17 +8,16 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://sdqhgbpsslsjln:3e4c77038676a
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-
 class item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String, nullable=False)
 
 
 class admins(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=False, nullable=False)
     password = db.Column(db.String(120), unique=False, nullable=False)
-#db.create_all()
+db.create_all()
 #print ("working")
 #x = admins(username = "maheen", password="testing")
 #db.session.add(x)
@@ -57,6 +56,32 @@ def logincheck():
         if(DB_user.username==username1 and DB_user2.password== password1):
             return render_template("loggedin.html")
     return "WORKING"
+@app.route("/loginadd")
+def loginadd():
+    return render_template("loggedinadd.html")
+
+@app.route("/successfuladd",methods=["POST"])
+def added():
+    APP_ROOT = os.path.abspath("../Maheen Ghazal/")
+    print(APP_ROOT)
+    targetfolder = os.path.join(APP_ROOT,'static/images/')
+    print(targetfolder)
+
+    number =db.session.execute("Select Max(Id) from admins").fetchone()
+
+    print("HI")
+
+    print(number[0])
+    for file in request.files.getlist("file"):
+        file.filename = int(number[0])+1
+        targetfolder = targetfolder + str(file.filename)
+        file.save(targetfolder)
+    name = request.form.get("itemname")
+
+    x = item(name = name)
+    db.session.add(x)
+    db.session.commit()
+    return "SUCCESS";
 
 
 
