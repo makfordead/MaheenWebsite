@@ -88,13 +88,16 @@
 
 		<div class="container-fluid pt70 pb70">
 			<div id="fh5co-projects-feed" class="fh5co-projects-feed clearfix masonry">
+
+				{% for item in item_to_re %}
 				<div class="fh5co-project masonry-brick">
 					<a href="single.html">
-						<img src="../static/images/img_20.jpg" alt="Free HTML5 by FreeHTML5.co">
+{{item.id}}
+						<img src="{{item.id}}" alt="Free HTML5 by FreeHTML5.co">
 						<h2>Your Project Title Here</h2>
 					</a>
 				</div>
-				
+				{% endfor %}
 			<!--END .fh5co-projects-feed-->
 		</div>
 		<!-- END .container-fluid -->

@@ -23,10 +23,24 @@ db.create_all()
 #db.session.add(x)
 #db.session.commit()
 #print("worked")
-
+class printer():
+    def __init__(self,id,name):
+        self.id = id
+        self.name = name
 @app.route('/')
 def index():
-    return render_template("index.html")
+    items = db.session.execute("Select * from item")
+    item_to_re = []
+    APP_ROOT = os.path.abspath("../Maheen Ghazal/")
+    targetfolder = os.path.join(APP_ROOT,'static/images/')
+    for item1 in items:
+            current = printer(item1["id"],item1["name"])
+            current.id = "../static/images/" + str(current.id)
+            #targetfolder + "appay-clipart-small.png" ##str(current.id) + ".png"
+            item_to_re.append(current)
+            print(current.id)
+    print("working")
+    return render_template("index.html",item_to_re = item_to_re)
 
 @app.route("/about")
 def aboutme():
@@ -64,17 +78,20 @@ def loginadd():
 def added():
     APP_ROOT = os.path.abspath("../Maheen Ghazal/")
     print(APP_ROOT)
-    targetfolder = os.path.join(APP_ROOT,'static/images/')
+    targetfolder = os.path.join(APP_ROOT,'static/')
     print(targetfolder)
 
-    number =db.session.execute("Select Max(Id) from admins").fetchone()
+    number =db.session.execute("Select Max(Id) from item").fetchone()
 
     print("HI")
 
     print(number[0])
     for file in request.files.getlist("file"):
-        file.filename = int(number[0])+1
-        targetfolder = targetfolder + str(file.filename)
+        if number[0] is not None:
+            file.filename = int(number[0])+1
+        else:
+            file.filename = 0
+        targetfolder = targetfolder + "/images/"+str(file.filename)
         file.save(targetfolder)
     name = request.form.get("itemname")
 
@@ -82,7 +99,6 @@ def added():
     db.session.add(x)
     db.session.commit()
     return "SUCCESS";
-
 
 
 app.debug = True
