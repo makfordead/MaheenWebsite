@@ -1,1 +1,1 @@
-web gunicorn appLapp
+web gunicorn app:app
