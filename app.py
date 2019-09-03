@@ -32,6 +32,7 @@ def index():
     items = db.session.execute("Select * from item")
     item_to_re = []
     APP_ROOT = os.path.abspath("../Maheen Ghazal/")
+    print(APP_ROOT)
     targetfolder = os.path.join(APP_ROOT,'static/images/')
     for item1 in items:
             current = printer(item1["id"],item1["name"])
